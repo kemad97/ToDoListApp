@@ -15,17 +15,15 @@
 #define TASK_PRIORITY_MEDIUM 1
 #define TASK_PRIORITY_HIGH 2
 
-
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Task : NSObject
+@interface Task : NSObject <NSCoding>
+
 @property  NSString *name;
-@property (nonatomic, strong) NSString *description;
+@property  NSString *taskDescription;
 @property  NSInteger priority;
 @property  NSDate *dueDate;
-@property  NSInteger status; 
-
+@property  NSInteger status;
 
 @end
 
