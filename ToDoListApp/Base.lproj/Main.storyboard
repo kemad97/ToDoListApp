@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--To Do List-->
         <scene sceneID="m05-Rh-SXk">
             <objects>
                 <tableViewController storyboardIdentifier="ToDoID" id="yRN-WJ-YaN" customClass="TasksTableViewController" sceneMemberID="viewController">
@@ -25,19 +25,27 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="TaskCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="6jf-qa-5da" customClass="TaskTableViewCell">
+                                <rect key="frame" x="0.0" y="93.666667938232422" width="393" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6jf-qa-5da" id="I4k-4s-iuh" customClass="TaskTableViewCell">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="yRN-WJ-YaN" id="uka-XJ-Oh8"/>
                             <outlet property="delegate" destination="yRN-WJ-YaN" id="1VH-O0-FRV"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="vyv-cb-NXX"/>
+                    <navigationItem key="navigationItem" title="To Do List" id="vyv-cb-NXX"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aXf-tt-kPX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1439" y="-543"/>
+            <point key="canvasLocation" x="1438.9312977099237" y="-543.66197183098598"/>
         </scene>
-        <!--Root View Controller-->
+        <!--In Progress-->
         <scene sceneID="onC-a9-pza">
             <objects>
                 <tableViewController id="dtH-dy-dVt" sceneMemberID="viewController">
@@ -60,13 +68,13 @@
                             <outlet property="delegate" destination="dtH-dy-dVt" id="fex-9b-iek"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="hBR-U6-QW6"/>
+                    <navigationItem key="navigationItem" title="In Progress" id="hBR-U6-QW6"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="70e-DY-jkc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1636" y="147"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Done-->
         <scene sceneID="Czc-R0-QGf">
             <objects>
                 <tableViewController id="fZ3-xJ-Jzk" sceneMemberID="viewController">
@@ -89,7 +97,7 @@
                             <outlet property="delegate" destination="fZ3-xJ-Jzk" id="Bfe-pC-KPa"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="XdL-px-zcB"/>
+                    <navigationItem key="navigationItem" title="Done" id="XdL-px-zcB"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aU5-pg-Ci1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -185,6 +193,7 @@
                                 <rect key="frame" x="128" y="209" width="240" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="wtV-4d-cKk">
@@ -200,7 +209,7 @@
                                 </variation>
                             </segmentedControl>
                             <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Bcc-gV-PWp">
-                                <rect key="frame" x="128" y="376" width="240" height="79"/>
+                                <rect key="frame" x="127" y="376" width="240" height="79"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="maximumDate" timeIntervalSinceReferenceDate="1167562800">
                                     <!--2037-12-31 11:00:00 +0000-->
@@ -276,6 +285,7 @@
                                 <rect key="frame" x="137" y="254" width="240" height="49"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="gCB-jV-cgQ">
@@ -291,7 +301,7 @@
                                 </variation>
                             </segmentedControl>
                             <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="qnL-rb-MlO">
-                                <rect key="frame" x="130" y="420" width="250" height="70"/>
+                                <rect key="frame" x="129" y="420" width="250" height="70"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <date key="maximumDate" timeIntervalSinceReferenceDate="1167562800">
                                     <!--2037-12-31 11:00:00 +0000-->
@@ -335,6 +345,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="swT-Ws-24z" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="flk-13-69Y">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

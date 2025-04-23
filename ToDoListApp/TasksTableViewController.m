@@ -26,7 +26,7 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
                                   initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                   target:self
-                                  action:@selector(addButtonTapped)];
+                                  action:@selector(onAddClick)];
     self.navigationItem.rightBarButtonItem = addButton;
 
     
@@ -34,12 +34,15 @@
 }
 
 
-- (void)addButtonTapped {
+- (void)onAddClick {
     AddTaskViewController *addTaskVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AddTaskID"];
     addTaskVC.delegate = self;
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addTaskVC];
-    [self presentViewController:navController animated:YES completion:nil];
+    [self.navigationController pushViewController:addTaskVC animated:YES];
+
+    
+//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addTaskVC];
+//    [self :navController animated:YES completion:nil];
 }
 
 
@@ -90,6 +93,29 @@
     }
 }
 
+
+#pragma mark - AddTaskDelegate methods
+
+- (void)addTaskViewController:(AddTaskViewController *)controller didCreateTask:(Task *)task {
+    switch (task.priority) {
+        case TASK_PRIORITY_LOW:
+            [self.lowPriorityTasks addObject:task];
+            break;
+        case TASK_PRIORITY_MEDIUM:
+            [self.mediumPriorityTasks addObject:task];
+            break;
+        case TASK_PRIORITY_HIGH:
+            [self.highPriorityTasks addObject:task];
+            break;
+        default:
+            [self.mediumPriorityTasks addObject:task];
+            break;
+    }
+    
+    [self.tableView reloadData];
+    
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

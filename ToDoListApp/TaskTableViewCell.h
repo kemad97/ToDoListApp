@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TaskTableViewCell : UITableViewCell
-- (void)configureWithTask:(Task *)task iconImage:(UIImage *)iconImage iconColor:(UIColor *)iconColor;
+
 
 @end
 
