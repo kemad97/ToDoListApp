@@ -9,10 +9,12 @@
 #import "Task.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class AddTaskViewController;
+
 
 @protocol AddTaskDelegate <NSObject>
 
-- (void)addTaskViewController:(AddTaskViewController *)controller didCreateTask:(Task *)task;
+-(void)addTaskViewController:(AddTaskViewController *)controller didCreateTask:(Task *)task;
 
 @end
 

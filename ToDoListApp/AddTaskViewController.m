@@ -6,6 +6,7 @@
 //
 
 #import "AddTaskViewController.h"
+#import "TaskManager.h"
 
 @interface AddTaskViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *tf_taskName;
@@ -33,8 +34,33 @@
 */
 - (IBAction)btnAddTask:(id)sender {
     Task *newTask = [Task new];
-    newTask.name=
+    newTask.name=_tf_taskName.text;
+    newTask.taskDescription=_tv_taskDesc.text;
     
+    switch (_segment_priority.selectedSegmentIndex) {
+        case 0:
+            newTask.priority=TASK_PRIORITY_LOW;
+            break;
+
+        case 1:
+            newTask.priority=TASK_PRIORITY_MEDIUM;
+            break;
+            
+        case 2:
+            newTask.priority=TASK_PRIORITY_HIGH;
+            break;
+            
+        default:
+            newTask.priority=TASK_PRIORITY_MEDIUM;
+            break;
+    }
+    newTask.dueDate=self.datePicker.date;
+    newTask.status=TASK_STATUS_TODO;
+    
+    [self.delegate addTaskViewController:self didCreateTask:newTask];
+
+    [self.navigationController popViewControllerAnimated:YES];
+
 }
 
 @end
