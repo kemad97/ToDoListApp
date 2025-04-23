@@ -8,7 +8,7 @@
 #import "TasksTableViewController.h"
 #import "AddTaskViewController.h"
 #import "AddTaskDelegate.h"
-
+#import "EditDetailsViewController.h"
 
 @interface TasksTableViewController ()
 
@@ -143,6 +143,35 @@
     [self.tableView reloadData];
     
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Task *selectedTask = nil;
+    
+    switch (indexPath.section) {
+        case TASK_PRIORITY_HIGH:
+                selectedTask = self.highPriorityTasks[indexPath.row];
+            
+            break;
+        case TASK_PRIORITY_MEDIUM:
+                selectedTask = self.mediumPriorityTasks[indexPath.row];
+            
+            break;
+        case TASK_PRIORITY_LOW: 
+                selectedTask = self.lowPriorityTasks[indexPath.row];
+            
+            break;
+    }
+    
+    if (selectedTask) {
+        EditDetailsViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editID"];
+        editVC.task = selectedTask;
+        editVC.delegate = self; // Set self as the delegate
+        [self.navigationController pushViewController:editVC animated:YES];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 /*
 // Override to support conditional editing of the table view.

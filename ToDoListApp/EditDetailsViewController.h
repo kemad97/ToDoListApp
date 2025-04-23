@@ -6,10 +6,16 @@
 //
 
 #import "ViewController.h"
+#import "AddTaskDelegate.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EditDetailsViewController : ViewController
+
+@property  Task *task;
+@property id<AddTaskDelegate> delegate;
+
 
 @end
 

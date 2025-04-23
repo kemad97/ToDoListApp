@@ -6,12 +6,20 @@
 //
 
 #import "EditDetailsViewController.h"
+#import "TaskManager.h"
+#import "Task.h"
 
 @interface EditDetailsViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *tf_taskName;
 @property (weak, nonatomic) IBOutlet UITextView *tv_taskDesc;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment_Priority;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segment_State;
+
+@property  TaskManager *taskManager;
+@property  Task *originalTask;
+
+
 
 @end
 
@@ -20,6 +28,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.taskManager = [[TaskManager alloc] init];
+    self.tf_taskName.text = self.task.name;
+    
+    self.tv_taskDesc.text = self.task.taskDescription;
+    
+    self.segment_Priority.selectedSegmentIndex = self.task.priority;
+    
+    self.datePicker.date = self.task.dueDate;
+    
+    self.segment_State.selectedSegmentIndex = self.task.status;
+    
+    self.title = @"Edit Task";
+
 }
 
 /*
@@ -32,6 +53,24 @@
 }
 */
 - (IBAction)btnEditTask:(id)sender {
-}
+    
+        Task *updatedTask = [[Task alloc] init];
+        updatedTask.name = self.tf_taskName.text;
+        updatedTask.taskDescription = self.tv_taskDesc.text;
+        updatedTask.priority = self.segment_Priority.selectedSegmentIndex;
+        updatedTask.dueDate = self.datePicker.date;
+        updatedTask.status = self.segment_State.selectedSegmentIndex;
+        
+        [self.taskManager deleteTask:self.originalTask];
+
+        
+        [self.taskManager saveTask:updatedTask];
+                
+            [self.delegate addTaskViewController:(id)self MyTask:updatedTask];
+        
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+
 
 @end
