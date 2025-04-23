@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol AddTaskDelegate <NSObject>
 
--(void)addTaskViewController:(AddTaskViewController *)controller didCreateTask:(Task *)task;
+-(void)addTaskViewController:(AddTaskViewController *)controller MyTask:(Task *)task;
 
 @end
 

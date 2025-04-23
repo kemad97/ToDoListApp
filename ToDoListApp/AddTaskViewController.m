@@ -57,7 +57,7 @@
     newTask.dueDate=self.datePicker.date;
     newTask.status=TASK_STATUS_TODO;
     
-    [self.delegate addTaskViewController:self didCreateTask:newTask];
+    [self.delegate addTaskViewController:self MyTask:newTask];
 
     [self.navigationController popViewControllerAnimated:YES];
 
