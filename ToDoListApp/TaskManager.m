@@ -33,7 +33,26 @@
 }
 
 - (void)deleteTask:(Task *)task {
+    NSMutableArray *tasks = [[self getAllTasks] mutableCopy];
     
+    for (NSInteger i = 0; i < tasks.count; i++) {
+        Task *currentTask = tasks[i];
+        
+        if ([currentTask.name isEqualToString:task.name] &&
+            [currentTask.dueDate isEqualToDate:task.dueDate]) {
+            
+            [tasks removeObjectAtIndex:i];
+            
+            NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:tasks];
+            [[NSUserDefaults standardUserDefaults] setObject:tasksData forKey:@"tasks"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            NSLog(@"Task deleted: %@", task.name);
+            return; 
+        }
+    }
+    
+    NSLog(@"Task not found for deletion: %@", task.name);
 }
 
 @end

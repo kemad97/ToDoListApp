@@ -9,6 +9,7 @@
 #import "AddTaskViewController.h"
 #import "AddTaskDelegate.h"
 #import "EditDetailsViewController.h"
+#import "TaskManager.h"
 
 @interface TasksTableViewController ()
 
@@ -167,19 +168,50 @@
     if (selectedTask) {
         EditDetailsViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editID"];
         editVC.task = selectedTask;
-        editVC.delegate = self; // Set self as the delegate
+        editVC.delegate = self;
         [self.navigationController pushViewController:editVC animated:YES];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
-/*
-// Override to support conditional editing of the table view.
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        Task *taskToDelete = nil;
+        
+        switch (indexPath.section) {
+            case TASK_PRIORITY_HIGH:
+                taskToDelete = self.highPriorityTasks[indexPath.row];
+                [self.highPriorityTasks removeObjectAtIndex:indexPath.row];
+                break;
+                
+            case TASK_PRIORITY_MEDIUM:
+                taskToDelete = self.mediumPriorityTasks[indexPath.row];
+                [self.mediumPriorityTasks removeObjectAtIndex:indexPath.row];
+                break;
+                
+            case TASK_PRIORITY_LOW:
+                taskToDelete = self.lowPriorityTasks[indexPath.row];
+                [self.lowPriorityTasks removeObjectAtIndex:indexPath.row];
+                break;
+        }
+        
+        if (taskToDelete) {
+            TaskManager *taskManager = [[TaskManager alloc] init];
+            [taskManager deleteTask:taskToDelete];
+            
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    }
+}
+
+
 
 /*
 // Override to support editing the table view.
