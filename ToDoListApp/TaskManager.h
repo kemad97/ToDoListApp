@@ -18,6 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)saveTask:(Task *)task;
 - (void)deleteTask:(Task *)task;
 
+- (NSArray<Task *> *)tasksWithStatus:(NSInteger)status;
+- (NSArray<Task *> *)tasksWithPriority:(NSInteger)priority;
+
 @end
 
 NS_ASSUME_NONNULL_END

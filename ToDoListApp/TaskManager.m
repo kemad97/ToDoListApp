@@ -9,6 +9,26 @@
 
 @implementation TaskManager
 
+
++ (instancetype)sharedManager {
+    static TaskManager *sharedManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedManager = [[self alloc] init];
+    });
+    return sharedManager;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _tasks = [NSMutableArray array];
+    }
+    return self;
+}
+
+
+
 - (NSArray<Task *> *)getAllTasks {
     NSData *tasksData = [[NSUserDefaults standardUserDefaults] objectForKey:@"tasks"];
     if (tasksData) {
