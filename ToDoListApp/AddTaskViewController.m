@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *tv_taskDesc;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment_priority;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (strong, nonatomic) TaskManager *taskManager;
 
 @end
 
@@ -21,6 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.taskManager = [[TaskManager alloc] init];
+
 }
 
 /*
@@ -56,6 +59,9 @@
     }
     newTask.dueDate=self.datePicker.date;
     newTask.status=TASK_STATUS_TODO;
+    
+    [self.taskManager saveTask:newTask];
+
     
     [self.delegate addTaskViewController:self MyTask:newTask];
 

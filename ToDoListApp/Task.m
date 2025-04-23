@@ -21,21 +21,21 @@
     return self;
 }
 
-#pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.name forKey:@"name"];
-    [coder encodeObject:self.description forKey:@"description"];
+    [coder encodeObject:self.taskDescription forKey:@"taskDescription"];
     [coder encodeInteger:self.priority forKey:@"priority"];
     [coder encodeObject:self.dueDate forKey:@"dueDate"];
     [coder encodeInteger:self.status forKey:@"status"];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
-    self = [super init];
-    if (self) {
+    
+    if ( self = [super init])
+    {
         _name = [coder decodeObjectForKey:@"name"];
-        _taskDescription = [coder decodeObjectForKey:@"description"];
+        _taskDescription = [coder decodeObjectForKey:@"taskDescription"];
         _priority = [coder decodeIntegerForKey:@"priority"];
         _dueDate = [coder decodeObjectForKey:@"dueDate"];
         _status = [coder decodeIntegerForKey:@"status"];

@@ -3,44 +3,37 @@
 //  ToDoListApp
 //
 //  Created by Kerolos on 23/04/2025.
-//
+
 
 #import "TaskManager.h"
 
 @implementation TaskManager
 
 - (NSArray<Task *> *)getAllTasks {
-    return [self.tasks copy];
+    NSData *tasksData = [[NSUserDefaults standardUserDefaults] objectForKey:@"tasks"];
+    if (tasksData) {
+        NSArray *tasks = [NSKeyedUnarchiver unarchiveObjectWithData:tasksData];
+        NSLog(@"Got %d tasks from NSUserDefaults", (int)tasks.count);
+        return tasks;
+
+    }
+    return @[];
 }
 
 - (void)saveTask:(Task *)task {
-    [self.tasks addObject:task];
-    [self persistTasks];
-
+    NSMutableArray *tasks = [[self getAllTasks] mutableCopy];
+    [tasks addObject:task];
+    
+    NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:tasks];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:tasksData forKey:@"tasks"];
+    [defaults synchronize];
+    
+    NSLog(@"Saved task: %@. Total tasks: %lu", task.name, (unsigned long)tasks.count);
 }
-
 
 - (void)deleteTask:(Task *)task {
-    [self.tasks removeObject:task];
-    [self persistTasks];
+    
 }
-
-
-- (void)loadTasks {
-    NSData *tasksData = [[NSUserDefaults standardUserDefaults] objectForKey:@"tasks"];
-    if (tasksData) {
-        self.tasks = [[NSKeyedUnarchiver unarchiveObjectWithData:tasksData] mutableCopy];
-    } else {
-        self.tasks = [NSMutableArray array];
-    }
-}
-
-
-- (void)persistTasks {
-    NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:self.tasks];
-    [[NSUserDefaults standardUserDefaults] setObject:tasksData forKey:@"tasks"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
 
 @end

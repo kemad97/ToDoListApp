@@ -56,11 +56,11 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
     switch (section) {
-        case TASK_PRIORITY_LOW:
+        case TASK_PRIORITY_HIGH:
             return self.highPriorityTasks.count;
         case TASK_PRIORITY_MEDIUM:
             return self.mediumPriorityTasks.count;
-        case TASK_PRIORITY_HIGH:
+        case TASK_PRIORITY_LOW:
             return self.lowPriorityTasks.count;
         default:
             return 0;
@@ -71,25 +71,36 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
     
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
-    
+    UIImage *priorityIcon = nil;
+
     
     Task *task = nil;
     switch (indexPath.section) {
-        case 0:
-                task = self.highPriorityTasks[indexPath.row];
+        case TASK_PRIORITY_HIGH:
+            task = self.highPriorityTasks[indexPath.row];
+            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+            cell.imageView.tintColor = [UIColor redColor];
+
             break;
-        case 1:
+        case TASK_PRIORITY_MEDIUM:
                 task = self.mediumPriorityTasks[indexPath.row];
+            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+            cell.imageView.tintColor = [UIColor orangeColor];
+
             break;
-        case 2:
+        case TASK_PRIORITY_LOW:
                 task = self.lowPriorityTasks[indexPath.row];
+            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+            cell.imageView.tintColor = [UIColor systemGrayColor];
+
             break;
     }
     
-    if (task) {
+    if (task != nil) {
         cell.textLabel.text = task.name;
-        
         cell.detailTextLabel.text = task.taskDescription;
+        cell.imageView.image = priorityIcon;
+
         
     }
     
@@ -99,11 +110,11 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case 0:
+        case TASK_PRIORITY_HIGH:
             return @"High Priority";
-        case 1:
+        case TASK_PRIORITY_MEDIUM:
             return @"Medium Priority";
-        case 2:
+        case TASK_PRIORITY_LOW:
             return @"Low Priority";
         default:
             return @"";
