@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1405F5E2DB8C5EC00681597 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F5C2DB8C5EC00681597 /* Task.m */; };
+		E1405F5F2DB8C5EC00681597 /* TaskTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F5D2DB8C5EC00681597 /* TaskTableViewCell.m */; };
+		E1405F622DB8C89500681597 /* TasksTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F612DB8C89500681597 /* TasksTableViewController.m */; };
+		E1405F652DB8D07200681597 /* EditDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F642DB8D07200681597 /* EditDetailsViewController.m */; };
+		E1405F682DB8D6C100681597 /* AddTaskViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F672DB8D6C100681597 /* AddTaskViewController.m */; };
+		E1405F6D2DB8E11A00681597 /* TaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E1405F6C2DB8E11A00681597 /* TaskManager.m */; };
 		E16D8D302DB833FC00C51059 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D2F2DB833FC00C51059 /* AppDelegate.m */; };
 		E16D8D332DB833FC00C51059 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D322DB833FC00C51059 /* SceneDelegate.m */; };
 		E16D8D362DB833FC00C51059 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D352DB833FC00C51059 /* ViewController.m */; };
@@ -37,6 +43,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E1405F5A2DB8C5EC00681597 /* TaskTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskTableViewCell.h; sourceTree = "<group>"; };
+		E1405F5B2DB8C5EC00681597 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		E1405F5C2DB8C5EC00681597 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		E1405F5D2DB8C5EC00681597 /* TaskTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskTableViewCell.m; sourceTree = "<group>"; };
+		E1405F602DB8C89500681597 /* TasksTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TasksTableViewController.h; sourceTree = "<group>"; };
+		E1405F612DB8C89500681597 /* TasksTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TasksTableViewController.m; sourceTree = "<group>"; };
+		E1405F632DB8D07200681597 /* EditDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditDetailsViewController.h; sourceTree = "<group>"; };
+		E1405F642DB8D07200681597 /* EditDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditDetailsViewController.m; sourceTree = "<group>"; };
+		E1405F662DB8D6C100681597 /* AddTaskViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddTaskViewController.h; sourceTree = "<group>"; };
+		E1405F672DB8D6C100681597 /* AddTaskViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddTaskViewController.m; sourceTree = "<group>"; };
+		E1405F6A2DB8DEE200681597 /* AddTaskDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddTaskDelegate.h; sourceTree = "<group>"; };
+		E1405F6B2DB8E11A00681597 /* TaskManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaskManager.h; sourceTree = "<group>"; };
+		E1405F6C2DB8E11A00681597 /* TaskManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaskManager.m; sourceTree = "<group>"; };
 		E16D8D2B2DB833FC00C51059 /* ToDoListApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoListApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E16D8D2E2DB833FC00C51059 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E16D8D2F2DB833FC00C51059 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -104,6 +123,10 @@
 		E16D8D2D2DB833FC00C51059 /* ToDoListApp */ = {
 			isa = PBXGroup;
 			children = (
+				E1405F5B2DB8C5EC00681597 /* Task.h */,
+				E1405F5C2DB8C5EC00681597 /* Task.m */,
+				E1405F5A2DB8C5EC00681597 /* TaskTableViewCell.h */,
+				E1405F5D2DB8C5EC00681597 /* TaskTableViewCell.m */,
 				E16D8D2E2DB833FC00C51059 /* AppDelegate.h */,
 				E16D8D2F2DB833FC00C51059 /* AppDelegate.m */,
 				E16D8D312DB833FC00C51059 /* SceneDelegate.h */,
@@ -115,6 +138,15 @@
 				E16D8D3C2DB833FD00C51059 /* LaunchScreen.storyboard */,
 				E16D8D3F2DB833FD00C51059 /* Info.plist */,
 				E16D8D402DB833FD00C51059 /* main.m */,
+				E1405F602DB8C89500681597 /* TasksTableViewController.h */,
+				E1405F612DB8C89500681597 /* TasksTableViewController.m */,
+				E1405F632DB8D07200681597 /* EditDetailsViewController.h */,
+				E1405F642DB8D07200681597 /* EditDetailsViewController.m */,
+				E1405F662DB8D6C100681597 /* AddTaskViewController.h */,
+				E1405F672DB8D6C100681597 /* AddTaskViewController.m */,
+				E1405F6A2DB8DEE200681597 /* AddTaskDelegate.h */,
+				E1405F6B2DB8E11A00681597 /* TaskManager.h */,
+				E1405F6C2DB8E11A00681597 /* TaskManager.m */,
 			);
 			path = ToDoListApp;
 			sourceTree = "<group>";
@@ -266,9 +298,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1405F5E2DB8C5EC00681597 /* Task.m in Sources */,
+				E1405F652DB8D07200681597 /* EditDetailsViewController.m in Sources */,
 				E16D8D362DB833FC00C51059 /* ViewController.m in Sources */,
+				E1405F5F2DB8C5EC00681597 /* TaskTableViewCell.m in Sources */,
+				E1405F6D2DB8E11A00681597 /* TaskManager.m in Sources */,
 				E16D8D302DB833FC00C51059 /* AppDelegate.m in Sources */,
+				E1405F622DB8C89500681597 /* TasksTableViewController.m in Sources */,
 				E16D8D412DB833FD00C51059 /* main.m in Sources */,
+				E1405F682DB8D6C100681597 /* AddTaskViewController.m in Sources */,
 				E16D8D332DB833FC00C51059 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
