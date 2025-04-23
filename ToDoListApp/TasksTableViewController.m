@@ -12,6 +12,7 @@
 #import "TaskManager.h"
 
 @interface TasksTableViewController ()
+@property (strong, nonatomic) TaskManager *taskManager;
 
 @end
 
@@ -31,7 +32,111 @@
     self.navigationItem.rightBarButtonItem = addButton;
 
     
+    self.filteredLowPriorityTasks = [NSMutableArray array];
+    self.filteredMediumPriorityTasks = [NSMutableArray array];
+    self.filteredHighPriorityTasks = [NSMutableArray array];
     
+    [self setupSearchController];
+
+
+    
+    
+}
+
+- (void)setupSearchController {
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
+    self.searchController.searchBar.placeholder = @"Search Tasks";
+    self.searchController.searchBar.delegate = self;
+    
+    self.searchController.searchBar.tintColor = [UIColor systemBlueColor];
+    
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.searchController = self.searchController;
+        self.navigationItem.hidesSearchBarWhenScrolling = NO;
+    } else {
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+    }
+    
+    self.definesPresentationContext = YES;
+}
+
+- (void)loadTasks {
+    [self.lowPriorityTasks removeAllObjects];
+    [self.mediumPriorityTasks removeAllObjects];
+    [self.highPriorityTasks removeAllObjects];
+    
+    NSArray *allTasks = [self.taskManager getAllTasks];
+    
+    for (Task *task in allTasks) {
+        switch (task.priority) {
+            case TASK_PRIORITY_LOW:
+                [self.lowPriorityTasks addObject:task];
+                break;
+            case TASK_PRIORITY_MEDIUM:
+                [self.mediumPriorityTasks addObject:task];
+                break;
+            case TASK_PRIORITY_HIGH:
+                [self.highPriorityTasks addObject:task];
+                break;
+        }
+    }
+    
+    [self.tableView reloadData];
+}
+
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    NSString *searchText = searchController.searchBar.text;
+    [self filterTasksWithSearchText:searchText];
+}
+
+- (void)filterTasksWithSearchText:(NSString *)searchText {
+    [self.filteredLowPriorityTasks removeAllObjects];
+    [self.filteredMediumPriorityTasks removeAllObjects];
+    [self.filteredHighPriorityTasks removeAllObjects];
+    
+    if (searchText.length == 0) {
+        self.isSearching = NO;
+        [self.tableView reloadData];
+        return;
+    }
+    
+    self.isSearching = YES;
+    
+    for (Task *task in self.highPriorityTasks) {
+        if ([self task:task matchesSearchText:searchText]) {
+            [self.filteredHighPriorityTasks addObject:task];
+        }
+    }
+    
+    for (Task *task in self.mediumPriorityTasks) {
+        if ([self task:task matchesSearchText:searchText]) {
+            [self.filteredMediumPriorityTasks addObject:task];
+        }
+    }
+    
+    for (Task *task in self.lowPriorityTasks) {
+        if ([self task:task matchesSearchText:searchText]) {
+            [self.filteredLowPriorityTasks addObject:task];
+        }
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (BOOL)task:(Task *)task matchesSearchText:(NSString *)searchText {
+    NSString *lowercaseSearchText = [searchText lowercaseString];
+    
+    if ([task.name.lowercaseString containsString:lowercaseSearchText]) {
+        return YES;
+    }
+    
+    if ([task.taskDescription.lowercaseString containsString:lowercaseSearchText]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 
@@ -55,18 +160,33 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    switch (section) {
-        case TASK_PRIORITY_HIGH:
-            return self.highPriorityTasks.count;
-        case TASK_PRIORITY_MEDIUM:
-            return self.mediumPriorityTasks.count;
-        case TASK_PRIORITY_LOW:
-            return self.lowPriorityTasks.count;
-        default:
-            return 0;
+    if (self.isSearching) {
+        // Use filtered arrays when searching
+        switch (section) {
+            case TASK_PRIORITY_HIGH:
+                return self.filteredHighPriorityTasks.count;
+            case TASK_PRIORITY_MEDIUM:
+                return self.filteredMediumPriorityTasks.count;
+            case TASK_PRIORITY_LOW:
+                return self.filteredLowPriorityTasks.count;
+            default:
+                return 0;
+        }
+    } else {
+        // Use regular arrays when not searching
+        switch (section) {
+            case TASK_PRIORITY_HIGH:
+                return self.highPriorityTasks.count;
+            case TASK_PRIORITY_MEDIUM:
+                return self.mediumPriorityTasks.count;
+            case TASK_PRIORITY_LOW:
+                return self.lowPriorityTasks.count;
+            default:
+                return 0;
+        }
     }
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
@@ -74,27 +194,56 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
     UIImage *priorityIcon = nil;
 
-    
     Task *task = nil;
-    switch (indexPath.section) {
-        case TASK_PRIORITY_HIGH:
-            task = self.highPriorityTasks[indexPath.row];
-            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
-            cell.imageView.tintColor = [UIColor redColor];
-
-            break;
-        case TASK_PRIORITY_MEDIUM:
+    
+    if (self.isSearching)
+    {
+        switch (indexPath.section) {
+            case TASK_PRIORITY_HIGH:
+                if (self.filteredHighPriorityTasks.count > indexPath.row) {
+                    task = self.filteredHighPriorityTasks[indexPath.row];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    cell.imageView.tintColor = [UIColor redColor];
+                }
+                break;
+            case TASK_PRIORITY_MEDIUM:
+                if (self.filteredMediumPriorityTasks.count > indexPath.row) {
+                    task = self.filteredMediumPriorityTasks[indexPath.row];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    cell.imageView.tintColor = [UIColor orangeColor];
+                }
+                break;
+            case TASK_PRIORITY_LOW:
+                if (self.filteredLowPriorityTasks.count > indexPath.row) {
+                    task = self.filteredLowPriorityTasks[indexPath.row];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    cell.imageView.tintColor = [UIColor systemGrayColor];
+                }
+                break;
+        }
+    }
+    else {
+        
+        switch (indexPath.section) {
+            case TASK_PRIORITY_HIGH:
+                task = self.highPriorityTasks[indexPath.row];
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                cell.imageView.tintColor = [UIColor redColor];
+                
+                break;
+            case TASK_PRIORITY_MEDIUM:
                 task = self.mediumPriorityTasks[indexPath.row];
-            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
-            cell.imageView.tintColor = [UIColor orangeColor];
-
-            break;
-        case TASK_PRIORITY_LOW:
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                cell.imageView.tintColor = [UIColor orangeColor];
+                
+                break;
+            case TASK_PRIORITY_LOW:
                 task = self.lowPriorityTasks[indexPath.row];
-            priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
-            cell.imageView.tintColor = [UIColor systemGrayColor];
-
-            break;
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                cell.imageView.tintColor = [UIColor systemGrayColor];
+                
+                break;
+        }
     }
     
     if (task != nil) {

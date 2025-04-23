@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSMutableArray<Task *> *mediumPriorityTasks;
 @property  NSMutableArray<Task *> *highPriorityTasks;
 
+@property (nonatomic, strong) UISearchController *searchController;
+@property (nonatomic, strong) NSMutableArray<Task *> *filteredLowPriorityTasks;
+@property (nonatomic, strong) NSMutableArray<Task *> *filteredMediumPriorityTasks;
+@property (nonatomic, strong) NSMutableArray<Task *> *filteredHighPriorityTasks;
+@property (nonatomic, assign) BOOL isSearching;
+
 
 @end
 
