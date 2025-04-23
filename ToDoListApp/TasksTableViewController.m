@@ -37,12 +37,10 @@
 - (void)onAddClick {
     AddTaskViewController *addTaskVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AddTaskID"];
     addTaskVC.delegate = self;
-    
-    [self.navigationController pushViewController:addTaskVC animated:YES];
+
 
     
-//    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:addTaskVC];
-//    [self :navController animated:YES completion:nil];
+    [self.navigationController pushViewController:addTaskVC animated:YES];
 }
 
 
@@ -58,26 +56,45 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
     switch (section) {
-        case 0:
+        case TASK_PRIORITY_LOW:
             return self.highPriorityTasks.count;
-        case 1:
+        case TASK_PRIORITY_MEDIUM:
             return self.mediumPriorityTasks.count;
-        case 2:
+        case TASK_PRIORITY_HIGH:
             return self.lowPriorityTasks.count;
         default:
             return 0;
     }
 }
-
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
     
-    // Configure the cell...
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
+    
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
+    
+    
+    Task *task = nil;
+    switch (indexPath.section) {
+        case 0:
+                task = self.highPriorityTasks[indexPath.row];
+            break;
+        case 1:
+                task = self.mediumPriorityTasks[indexPath.row];
+            break;
+        case 2:
+                task = self.lowPriorityTasks[indexPath.row];
+            break;
+    }
+    
+    if (task) {
+        cell.textLabel.text = task.name;
+        
+        cell.detailTextLabel.text = task.taskDescription;
+        
+    }
     
     return cell;
 }
-*/
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
