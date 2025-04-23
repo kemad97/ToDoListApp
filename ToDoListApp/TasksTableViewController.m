@@ -113,7 +113,7 @@
 
 #pragma mark - AddTaskDelegate methods
 
-- (void)addTaskViewController:(AddTaskViewController *)controller didCreateTask:(Task *)task {
+- (void)addTaskViewController:(AddTaskViewController *)controller MyTask:(Task *)task {
     switch (task.priority) {
         case TASK_PRIORITY_LOW:
             [self.lowPriorityTasks addObject:task];
