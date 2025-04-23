@@ -99,7 +99,7 @@
         <scene sceneID="n0H-2q-Drm">
             <objects>
                 <navigationController id="5aj-dd-Mod" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Done" id="xwz-vx-5UR"/>
+                    <tabBarItem key="tabBarItem" title="Done" image="checkmark.circle.fill" catalog="system" id="xwz-vx-5UR"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="47h-aF-1xM">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -116,7 +116,7 @@
         <scene sceneID="qqB-yP-5R2">
             <objects>
                 <navigationController id="ij2-iu-huz" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="InProgress" id="svv-aE-kfg"/>
+                    <tabBarItem key="tabBarItem" title="InProgress" image="button.programmable" catalog="system" id="svv-aE-kfg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ugF-A8-HIn">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -318,7 +318,7 @@
         <scene sceneID="ASV-jb-LYI">
             <objects>
                 <navigationController id="pXA-eL-cHX" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="ToDo" id="GYN-YA-kOd"/>
+                    <tabBarItem key="tabBarItem" title="ToDo" image="list.bullet.clipboard.fill" catalog="system" id="GYN-YA-kOd"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Byz-B2-BlO">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -353,6 +353,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="button.programmable" catalog="system" width="128" height="123"/>
+        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="list.bullet.clipboard.fill" catalog="system" width="103" height="128"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
