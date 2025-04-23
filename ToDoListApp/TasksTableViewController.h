@@ -7,14 +7,14 @@
 
 #import <UIKit/UIKit.h>
 #import "Task.h"
-
+#import "AddTaskDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TasksTableViewController : UITableViewController
+@interface TasksTableViewController : UITableViewController <AddTaskDelegate>
 
-@property (nonatomic, strong) NSMutableArray<Task *> *lowPriorityTasks;
-@property (nonatomic, strong) NSMutableArray<Task *> *mediumPriorityTasks;
-@property (nonatomic, strong) NSMutableArray<Task *> *highPriorityTasks;
+@property  NSMutableArray<Task *> *lowPriorityTasks;
+@property NSMutableArray<Task *> *mediumPriorityTasks;
+@property  NSMutableArray<Task *> *highPriorityTasks;
 
 
 @end

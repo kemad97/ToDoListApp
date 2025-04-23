@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AddTaskViewController : ViewController
 
 @property id<AddTaskDelegate> delegate;
+
 @end
 
 NS_ASSUME_NONNULL_END

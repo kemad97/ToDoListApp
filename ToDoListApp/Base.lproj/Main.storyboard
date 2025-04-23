@@ -339,14 +339,14 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="ij2-iu-huz" kind="relationship" relationship="viewControllers" id="8ty-cN-oE5"/>
                         <segue destination="pXA-eL-cHX" kind="relationship" relationship="viewControllers" id="HOC-rB-2pI"/>
+                        <segue destination="ij2-iu-huz" kind="relationship" relationship="viewControllers" id="8ty-cN-oE5"/>
                         <segue destination="5aj-dd-Mod" kind="relationship" relationship="viewControllers" id="gtk-pS-Mf1"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="by6-rm-WWP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-512" y="57"/>
+            <point key="canvasLocation" x="-981" y="146"/>
         </scene>
     </scenes>
     <resources>
