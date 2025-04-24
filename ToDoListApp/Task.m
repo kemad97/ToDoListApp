@@ -12,6 +12,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _taskId = [[NSUUID UUID] UUIDString];
+
         _name = @"";
         _taskDescription = @"";
         _priority = TASK_PRIORITY_LOW;
@@ -23,6 +25,8 @@
 
 
 - (void)encodeWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.taskId forKey:@"taskId"];
+
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.taskDescription forKey:@"taskDescription"];
     [coder encodeInteger:self.priority forKey:@"priority"];
@@ -34,6 +38,8 @@
     
     if ( self = [super init])
     {
+        _taskId = [coder decodeObjectForKey:@"taskId"];  
+
         _name = [coder decodeObjectForKey:@"name"];
         _taskDescription = [coder decodeObjectForKey:@"taskDescription"];
         _priority = [coder decodeIntegerForKey:@"priority"];

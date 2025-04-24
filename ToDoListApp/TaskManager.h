@@ -13,7 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSMutableArray<Task *> *tasks;
 
++ (instancetype)sharedManager;
 
+- (void)addTask:(Task *)task;  
 - (NSArray<Task *> *)getAllTasks;
 - (void)saveTask:(Task *)task;
 - (void)deleteTask:(Task *)task;

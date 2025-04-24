@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Task : NSObject <NSCoding>
 
+@property NSString *taskId;
+
 @property  NSString *name;
 @property  NSString *taskDescription;
 @property  NSInteger priority;

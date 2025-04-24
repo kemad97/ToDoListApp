@@ -7,6 +7,7 @@
 
 #import "AddTaskViewController.h"
 #import "TaskManager.h"
+#import "Task.h"
 
 @interface AddTaskViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *tf_taskName;
@@ -22,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.taskManager = [[TaskManager alloc] init];
+//    self.taskManager = [[TaskManager alloc] init];
 
 }
 
@@ -60,7 +61,7 @@
     newTask.dueDate=self.datePicker.date;
     newTask.status=TASK_STATUS_TODO;
     
-    [self.taskManager saveTask:newTask];
+    [[TaskManager sharedManager] addTask:newTask];
 
     
     [self.delegate addTaskViewController:self MyTask:newTask];

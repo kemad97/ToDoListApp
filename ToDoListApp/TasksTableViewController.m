@@ -38,9 +38,22 @@
     
     [self setupSearchController];
 
+    NSLog(@"viewDidLoad - High: %lu, Medium: %lu, Low: %lu",
+              (unsigned long)self.highPriorityTasks.count,
+              (unsigned long)self.mediumPriorityTasks.count,
+              (unsigned long)self.lowPriorityTasks.count);
+
+    self.taskManager = [TaskManager sharedManager];
+    NSLog(@"TaskManager initialized: %@", self.taskManager ? @"YES" : @"NO");
 
     
     
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSLog(@"viewWillAppear - Loading tasks");
+    [self loadTasks];
 }
 
 - (void)setupSearchController {
@@ -63,6 +76,12 @@
 }
 
 - (void)loadTasks {
+    
+    if (!self.taskManager) {
+        NSLog(@"ERROR: TaskManager is nil in loadTasks");
+        self.taskManager = [TaskManager sharedManager];
+    }
+
     [self.lowPriorityTasks removeAllObjects];
     [self.mediumPriorityTasks removeAllObjects];
     [self.highPriorityTasks removeAllObjects];

@@ -1,23 +1,22 @@
-//
-//  TaskManager.m
-//  ToDoListApp
-//
-//  Created by Kerolos on 23/04/2025.
-
-
 #import "TaskManager.h"
+#import "Task.h"
+
 
 @implementation TaskManager
 
-
 + (instancetype)sharedManager {
-    static TaskManager *sharedManager = nil;
+    static TaskManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
+    
     dispatch_once(&onceToken, ^{
-        sharedManager = [[self alloc] init];
+        sharedInstance = [[self alloc] init];
+        [sharedInstance loadTasks];
     });
-    return sharedManager;
+    
+    return sharedInstance;
 }
+
+
 
 - (instancetype)init {
     self = [super init];
@@ -27,52 +26,62 @@
     return self;
 }
 
-
-
 - (NSArray<Task *> *)getAllTasks {
-    NSData *tasksData = [[NSUserDefaults standardUserDefaults] objectForKey:@"tasks"];
-    if (tasksData) {
-        NSArray *tasks = [NSKeyedUnarchiver unarchiveObjectWithData:tasksData];
-        NSLog(@"Got %d tasks from NSUserDefaults", (int)tasks.count);
-        return tasks;
-
-    }
-    return @[];
+    NSLog(@"getAllTasks called, returning %lu tasks", (unsigned long)self.tasks.count);
+    return [self.tasks copy];
 }
 
-- (void)saveTask:(Task *)task {
-    NSMutableArray *tasks = [[self getAllTasks] mutableCopy];
-    [tasks addObject:task];
-    
-    NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:tasks];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:tasksData forKey:@"tasks"];
-    [defaults synchronize];
-    
-    NSLog(@"Saved task: %@. Total tasks: %lu", task.name, (unsigned long)tasks.count);
+- (NSArray *)allTasks {
+    return [self.tasks copy];
+}
+
+- (void)addTask:(Task *)task {
+    [self.tasks addObject:task];
+    [self saveTasks];
+}
+
+- (void)updateTask:(Task *)task {
+    for (NSInteger i = 0; i < self.tasks.count; i++) {
+        Task *existingTask = self.tasks[i];
+        if ([existingTask.taskId isEqualToString:task.taskId]) {
+            [self.tasks replaceObjectAtIndex:i withObject:task];
+            break;
+        }
+    }
+    [self saveTasks];
 }
 
 - (void)deleteTask:(Task *)task {
-    NSMutableArray *tasks = [[self getAllTasks] mutableCopy];
-    
-    for (NSInteger i = 0; i < tasks.count; i++) {
-        Task *currentTask = tasks[i];
-        
-        if ([currentTask.name isEqualToString:task.name] &&
-            [currentTask.dueDate isEqualToDate:task.dueDate]) {
-            
-            [tasks removeObjectAtIndex:i];
-            
-            NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:tasks];
-            [[NSUserDefaults standardUserDefaults] setObject:tasksData forKey:@"tasks"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            NSLog(@"Task deleted: %@", task.name);
-            return; 
+    NSInteger indexToRemove = NSNotFound;
+    for (NSInteger i = 0; i < self.tasks.count; i++) {
+        Task *existingTask = self.tasks[i];
+        if ([existingTask.taskId isEqualToString:task.taskId]) {
+            indexToRemove = i;
+            break;
         }
     }
     
-    NSLog(@"Task not found for deletion: %@", task.name);
+    if (indexToRemove != NSNotFound) {
+        [self.tasks removeObjectAtIndex:indexToRemove];
+        [self saveTasks];
+    }
+}
+
+- (void)saveTasks {
+    NSData *tasksData = [NSKeyedArchiver archivedDataWithRootObject:self.tasks];
+    [[NSUserDefaults standardUserDefaults] setObject:tasksData forKey:@"savedTasks"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
+- (void)loadTasks {
+    NSData *tasksData = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedTasks"];
+    if (tasksData) {
+        NSArray *loadedTasks = [NSKeyedUnarchiver unarchiveObjectWithData:tasksData];
+        if (loadedTasks) {
+            self.tasks = [loadedTasks mutableCopy];
+        }
+    }
 }
 
 @end
