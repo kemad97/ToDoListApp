@@ -1,32 +1,32 @@
 //
-//  InProgressViewController.m
+//  DoneViewController.m
 //  ToDoListApp
 //
 //  Created by Kerolos on 24/04/2025.
 //
 
-#import "InProgressViewController.h"
-#import "TaskManager.h"
+#import "DoneViewController.h"
 #import "EditDetailsViewController.h"
-@interface InProgressViewController ()
+#import "TaskManager.h"
+
+@interface DoneViewController ()
 @property (strong, nonatomic) TaskManager *taskManager;
+
 @end
 
-@implementation InProgressViewController
+@implementation DoneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _doneTasks = [NSMutableArray array];
+    _taskManager = [TaskManager sharedManager];
     
-    self.inProgressTasks = [NSMutableArray array];
-        self.taskManager = [TaskManager sharedManager];
-        self.title = @"In Progress";
-        
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(tasksUpdated:)
-                                                     name:@"TasksUpdatedNotification"
-                                                   object:nil];
+    self.title=@"Donee";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tasksUpdated:) name:@"TasksUpdatedNotification" object:nil];
+    
 }
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -42,14 +42,16 @@
 }
 
 -(void)loadTasks {
-    [_inProgressTasks removeAllObjects];
+    [_doneTasks removeAllObjects];
     
-    NSArray* inProgressTasksArr = [self.taskManager tasksWithStatus:1];
+    NSArray* doneTasksArr = [self.taskManager tasksWithStatus:1];
     
-    [self.inProgressTasks addObjectsFromArray:inProgressTasksArr];
+    [self.doneTasks addObjectsFromArray:doneTasksArr];
     
     [self.tableView reloadData];
 }
+
+
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -58,7 +60,7 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.inProgressTasks.count;  
+    return self.doneTasks.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -69,7 +71,7 @@
            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
        }
     
-    Task* task= self.inProgressTasks[indexPath.row];
+    Task* task= self.doneTasks[indexPath.row];
     
     cell.textLabel.text=task.name;
     cell.detailTextLabel.text=task.taskDescription;
@@ -98,7 +100,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    Task* selectedTask = _inProgressTasks[indexPath.row];
+    Task* selectedTask = _doneTasks[indexPath.row];
     
     EditDetailsViewController *editVC = [self.storyboard instantiateViewControllerWithIdentifier:@"editID"];
     editVC.task = selectedTask;
@@ -121,19 +123,14 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        if (indexPath.row < self.inProgressTasks.count) {
-            Task *taskToDelete = self.inProgressTasks[indexPath.row];
+        if (indexPath.row < self.doneTasks.count) {
+            Task *taskToDelete = self.doneTasks[indexPath.row];
             
-            [self.inProgressTasks removeObjectAtIndex:indexPath.row];
+            [self.doneTasks removeObjectAtIndex:indexPath.row];
             
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             
             [[TaskManager sharedManager] deleteTask:taskToDelete];
-        } else {
-            NSLog(@"Error: Trying to delete row %ld but only %lu rows exist",
-                  (long)indexPath.row, (unsigned long)self.inProgressTasks.count);
-            
-            [tableView reloadData];
         }
     }
 }
@@ -141,5 +138,4 @@
 - (void)addTaskViewController:(id)controller MyTask:(Task *)task {
     [self loadTasks];
 }
-
 @end
