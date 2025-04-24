@@ -23,6 +23,7 @@
 		E16D8D4B2DB833FE00C51059 /* ToDoListAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D4A2DB833FE00C51059 /* ToDoListAppTests.m */; };
 		E16D8D552DB833FE00C51059 /* ToDoListAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D542DB833FE00C51059 /* ToDoListAppUITests.m */; };
 		E16D8D572DB833FE00C51059 /* ToDoListAppUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E16D8D562DB833FE00C51059 /* ToDoListAppUITestsLaunchTests.m */; };
+		E1B38F942DBA225600F23B40 /* InProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1B38F932DBA225600F23B40 /* InProgressViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		E16D8D502DB833FE00C51059 /* ToDoListAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoListAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E16D8D542DB833FE00C51059 /* ToDoListAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoListAppUITests.m; sourceTree = "<group>"; };
 		E16D8D562DB833FE00C51059 /* ToDoListAppUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ToDoListAppUITestsLaunchTests.m; sourceTree = "<group>"; };
+		E1B38F922DBA225600F23B40 /* InProgressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InProgressViewController.h; sourceTree = "<group>"; };
+		E1B38F932DBA225600F23B40 /* InProgressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InProgressViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +150,8 @@
 				E1405F6A2DB8DEE200681597 /* AddTaskDelegate.h */,
 				E1405F6B2DB8E11A00681597 /* TaskManager.h */,
 				E1405F6C2DB8E11A00681597 /* TaskManager.m */,
+				E1B38F922DBA225600F23B40 /* InProgressViewController.h */,
+				E1B38F932DBA225600F23B40 /* InProgressViewController.m */,
 			);
 			path = ToDoListApp;
 			sourceTree = "<group>";
@@ -301,6 +306,7 @@
 				E1405F5E2DB8C5EC00681597 /* Task.m in Sources */,
 				E1405F652DB8D07200681597 /* EditDetailsViewController.m in Sources */,
 				E16D8D362DB833FC00C51059 /* ViewController.m in Sources */,
+				E1B38F942DBA225600F23B40 /* InProgressViewController.m in Sources */,
 				E1405F5F2DB8C5EC00681597 /* TaskTableViewCell.m in Sources */,
 				E1405F6D2DB8E11A00681597 /* TaskManager.m in Sources */,
 				E16D8D302DB833FC00C51059 /* AppDelegate.m in Sources */,

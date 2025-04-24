@@ -26,6 +26,19 @@
     return self;
 }
 
+
+
+- (NSArray<Task *> *)tasksWithStatus:(NSInteger)status {
+    NSMutableArray *filteredTasks = [NSMutableArray array];
+    for (Task *task in self.tasks) {
+        if (task.status == status) {
+            [filteredTasks addObject:task];
+        }
+    }
+    return [filteredTasks copy];
+}
+
+
 - (NSArray<Task *> *)getAllTasks {
     NSLog(@"getAllTasks called, returning %lu tasks", (unsigned long)self.tasks.count);
     return [self.tasks copy];
@@ -38,6 +51,9 @@
 - (void)addTask:(Task *)task {
     [self.tasks addObject:task];
     [self saveTasks];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TasksUpdatedNotification" object:nil];
+
 }
 
 - (void)updateTask:(Task *)task {
@@ -64,6 +80,8 @@
     if (indexToRemove != NSNotFound) {
         [self.tasks removeObjectAtIndex:indexToRemove];
         [self saveTasks];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"TasksUpdatedNotification" object:nil];
+
     }
 }
 

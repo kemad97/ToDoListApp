@@ -38,16 +38,25 @@
     
     [self setupSearchController];
 
-    NSLog(@"viewDidLoad - High: %lu, Medium: %lu, Low: %lu",
-              (unsigned long)self.highPriorityTasks.count,
-              (unsigned long)self.mediumPriorityTasks.count,
-              (unsigned long)self.lowPriorityTasks.count);
+   
 
     self.taskManager = [TaskManager sharedManager];
-    NSLog(@"TaskManager initialized: %@", self.taskManager ? @"YES" : @"NO");
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(tasksUpdated:)
+                                                     name:@"TasksUpdatedNotification"
+                                                   object:nil];
+    
+    
+}
 
-    
-    
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)tasksUpdated:(NSNotification *)notification {
+    [self loadTasks];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,7 +87,7 @@
 - (void)loadTasks {
     
     if (!self.taskManager) {
-        NSLog(@"ERROR: TaskManager is nil in loadTasks");
+        NSLog(@"ERROR: TaskManager is nil in tasktable");
         self.taskManager = [TaskManager sharedManager];
     }
 
@@ -86,7 +95,10 @@
     [self.mediumPriorityTasks removeAllObjects];
     [self.highPriorityTasks removeAllObjects];
     
-    NSArray *allTasks = [self.taskManager getAllTasks];
+    //NSArray *allTasks = [self.taskManager getAllTasks];
+    
+    NSArray *allTasks = [self.taskManager tasksWithStatus:0]; // TASK_STATUS_TODO
+
     
     for (Task *task in allTasks) {
         switch (task.priority) {

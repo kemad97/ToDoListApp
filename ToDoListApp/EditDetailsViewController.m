@@ -27,7 +27,6 @@
  
     [super viewDidLoad];
     self.tf_taskName.text = self.task.name;
-    
     self.tv_taskDesc.text = self.task.taskDescription;
     
     [self.segment_Priority setSelectedSegmentIndex:self.task.priority];
