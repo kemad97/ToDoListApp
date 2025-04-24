@@ -10,6 +10,9 @@
 #import "EditDetailsViewController.h"
 @interface InProgressViewController ()
 @property (strong, nonatomic) TaskManager *taskManager;
+@property (nonatomic, assign) BOOL isSorted;
+@property (strong, nonatomic) NSArray *originalTaskOrder;
+
 @end
 
 @implementation InProgressViewController
@@ -18,14 +21,50 @@
     [super viewDidLoad];
     
     self.inProgressTasks = [NSMutableArray array];
-        self.taskManager = [TaskManager sharedManager];
-        self.title = @"In Progress";
-        
-
+    self.taskManager = [TaskManager sharedManager];
+    self.title = @"In Progress";
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(tasksUpdated:)
-                                                     name:@"TasksUpdatedNotification"
-                                                   object:nil];
+                                             selector:@selector(tasksUpdated:)
+                                                 name:@"TasksUpdatedNotification"
+                                               object:nil];
+    
+    self.isSorted = NO;
+    UIBarButtonItem *sortButton = [[UIBarButtonItem alloc]
+                                       initWithTitle:@"Sort"
+                                       style:UIBarButtonItemStylePlain
+                                       target:self
+                                       action:@selector(sortTasksAlphabetically)];
+        self.navigationItem.rightBarButtonItem = sortButton;
+    
+}
+
+
+
+
+
+- (void)sortTasksAlphabetically {
+    if (self.isSorted) {
+        
+        self.isSorted = NO;
+        [self.inProgressTasks removeAllObjects];
+        [self.inProgressTasks addObjectsFromArray:self.originalTaskOrder];
+        self.navigationItem.rightBarButtonItem.title = @"Sort";
+        
+    } else {
+        
+        self.originalTaskOrder = [self.inProgressTasks copy];
+        self.isSorted = YES;
+        
+        [self.inProgressTasks sortUsingComparator:^NSComparisonResult(Task *task1, Task *task2) {
+            return [task1.name compare:task2.name];
+        }];
+        
+        self.navigationItem.rightBarButtonItem.title = @"Unsort";
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -41,12 +80,19 @@
     [self loadTasks];
 }
 
--(void)loadTasks {
+- (void)loadTasks {
     [_inProgressTasks removeAllObjects];
     
     NSArray* inProgressTasksArr = [self.taskManager tasksWithStatus:1];
-    
     [self.inProgressTasks addObjectsFromArray:inProgressTasksArr];
+    
+    if (self.isSorted) {
+        [self.inProgressTasks sortUsingComparator:^NSComparisonResult(Task *task1, Task *task2) {
+            return [task1.name compare:task2.name];
+        }];
+    } else {
+        self.originalTaskOrder = [self.inProgressTasks copy];
+    }
     
     [self.tableView reloadData];
 }
@@ -125,6 +171,13 @@
             Task *taskToDelete = self.inProgressTasks[indexPath.row];
             
             [self.inProgressTasks removeObjectAtIndex:indexPath.row];
+            
+            
+            if (self.isSorted && self.originalTaskOrder) {
+                           NSMutableArray *updatedOriginal = [self.originalTaskOrder mutableCopy];
+                           [updatedOriginal removeObject:taskToDelete]; 
+                           self.originalTaskOrder = [updatedOriginal copy];
+                       }
             
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             

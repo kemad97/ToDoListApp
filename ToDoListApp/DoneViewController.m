@@ -43,7 +43,7 @@
 -(void)loadTasks {
     [_doneTasks removeAllObjects];
     
-    NSArray* doneTasksArr = [self.taskManager tasksWithStatus:1];
+    NSArray* doneTasksArr = [self.taskManager tasksWithStatus:2];
     
     [self.doneTasks addObjectsFromArray:doneTasksArr];
     
