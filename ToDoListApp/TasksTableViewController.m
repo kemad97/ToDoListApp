@@ -192,7 +192,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.isSearching) {
-        // Use filtered arrays when searching
         switch (section) {
             case TASK_PRIORITY_HIGH:
                 return self.filteredHighPriorityTasks.count;
@@ -204,7 +203,6 @@
                 return 0;
         }
     } else {
-        // Use regular arrays when not searching
         switch (section) {
             case TASK_PRIORITY_HIGH:
                 return self.highPriorityTasks.count;
