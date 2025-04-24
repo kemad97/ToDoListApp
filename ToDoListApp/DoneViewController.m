@@ -21,7 +21,6 @@
     _doneTasks = [NSMutableArray array];
     _taskManager = [TaskManager sharedManager];
     
-    self.title=@"Donee";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tasksUpdated:) name:@"TasksUpdatedNotification" object:nil];
     

@@ -359,34 +359,34 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         Task *taskToDelete = nil;
         
         switch (indexPath.section) {
             case TASK_PRIORITY_HIGH:
-                taskToDelete = self.highPriorityTasks[indexPath.row];
-                [self.highPriorityTasks removeObjectAtIndex:indexPath.row];
+                if (indexPath.row < self.highPriorityTasks.count) {
+                    taskToDelete = self.highPriorityTasks[indexPath.row];
+                }
                 break;
                 
             case TASK_PRIORITY_MEDIUM:
-                taskToDelete = self.mediumPriorityTasks[indexPath.row];
-                [self.mediumPriorityTasks removeObjectAtIndex:indexPath.row];
+                if (indexPath.row < self.mediumPriorityTasks.count) {
+                    taskToDelete = self.mediumPriorityTasks[indexPath.row];
+                }
                 break;
                 
             case TASK_PRIORITY_LOW:
-                taskToDelete = self.lowPriorityTasks[indexPath.row];
-                [self.lowPriorityTasks removeObjectAtIndex:indexPath.row];
+                if (indexPath.row < self.lowPriorityTasks.count) {
+                    taskToDelete = self.lowPriorityTasks[indexPath.row];
+                }
                 break;
         }
         
         if (taskToDelete) {
             [[TaskManager sharedManager] deleteTask:taskToDelete];
-
             
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self loadTasks];
         }
     }
 }
