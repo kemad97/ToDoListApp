@@ -42,15 +42,15 @@
     newTask.taskDescription=_tv_taskDesc.text;
     
     switch (_segment_priority.selectedSegmentIndex) {
-        case 0:
+        case TASK_PRIORITY_LOW:
             newTask.priority=TASK_PRIORITY_LOW;
             break;
 
-        case 1:
+        case TASK_PRIORITY_MEDIUM:
             newTask.priority=TASK_PRIORITY_MEDIUM;
             break;
             
-        case 2:
+        case TASK_PRIORITY_HIGH:
             newTask.priority=TASK_PRIORITY_HIGH;
             break;
             
