@@ -120,7 +120,11 @@
     cell.textLabel.text=task.name;
     cell.detailTextLabel.text=task.taskDescription;
     
-    UIImage *priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+    UIImageConfiguration *largeConfig = [UIImageSymbolConfiguration configurationWithPointSize:25 weight:UIImageSymbolWeightMedium scale:UIImageSymbolScaleLarge];
+    
+    UIImage *priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
+    
+    
 
     
     switch (task.priority){
@@ -170,18 +174,48 @@
         if (indexPath.row < self.inProgressTasks.count) {
             Task *taskToDelete = self.inProgressTasks[indexPath.row];
             
-            [self.inProgressTasks removeObjectAtIndex:indexPath.row];
+            // Create the alert controller with task name in the message
+            UIAlertController *alertController = [UIAlertController
+                                                 alertControllerWithTitle:@"Delete Task"
+                                                 message:[NSString stringWithFormat:@"Are you sure you want to delete \"%@\"?", taskToDelete.name]
+                                                 preferredStyle:UIAlertControllerStyleAlert];
             
+            // Create Cancel action
+            UIAlertAction *cancelAction = [UIAlertAction
+                                          actionWithTitle:@"Cancel"
+                                          style:UIAlertActionStyleCancel
+                                          handler:^(UIAlertAction * _Nonnull action) {
+                // User cancelled, so we do nothing and the task remains
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }];
             
-            if (self.isSorted && self.originalTaskOrder) {
-                           NSMutableArray *updatedOriginal = [self.originalTaskOrder mutableCopy];
-                           [updatedOriginal removeObject:taskToDelete]; 
-                           self.originalTaskOrder = [updatedOriginal copy];
-                       }
+            // Create Delete action
+            UIAlertAction *deleteAction = [UIAlertAction
+                                          actionWithTitle:@"Delete"
+                                          style:UIAlertActionStyleDestructive
+                                          handler:^(UIAlertAction * _Nonnull action) {
+                // User confirmed delete, so proceed with deletion
+                [self.inProgressTasks removeObjectAtIndex:indexPath.row];
+                
+                // Update original task order array if sorted
+                if (self.isSorted && self.originalTaskOrder) {
+                    NSMutableArray *updatedOriginal = [self.originalTaskOrder mutableCopy];
+                    [updatedOriginal removeObject:taskToDelete];
+                    self.originalTaskOrder = [updatedOriginal copy];
+                }
+                
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                
+                [[TaskManager sharedManager] deleteTask:taskToDelete];
+            }];
             
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            // Add the actions to the alert controller
+            [alertController addAction:cancelAction];
+            [alertController addAction:deleteAction];
             
-            [[TaskManager sharedManager] deleteTask:taskToDelete];
+            // Present the alert controller
+            [self presentViewController:alertController animated:YES completion:nil];
+            
         } else {
             NSLog(@"Error: Trying to delete row %ld but only %lu rows exist",
                   (long)indexPath.row, (unsigned long)self.inProgressTasks.count);
@@ -194,5 +228,11 @@
 - (void)addTaskViewController:(id)controller MyTask:(Task *)task {
     [self loadTasks];
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 80;
+}
+
 
 @end

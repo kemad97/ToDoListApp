@@ -72,10 +72,21 @@
     
     Task* task= self.doneTasks[indexPath.row];
     
-    cell.textLabel.text=task.name;
+    // Create attributed string with strikethrough for task name
+    NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:task.name];
+    [attributedTitle addAttribute:NSStrikethroughStyleAttributeName
+                           value:@(NSUnderlineStyleSingle)
+                           range:NSMakeRange(0, [task.name length])];
+   
+    // Apply the attributed string to the cell's textLabel
+    cell.textLabel.attributedText = attributedTitle;
+    
     cell.detailTextLabel.text=task.taskDescription;
     
-    UIImage *priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+    UIImageConfiguration *largeConfig = [UIImageSymbolConfiguration configurationWithPointSize:25 weight:UIImageSymbolWeightMedium scale:UIImageSymbolScaleLarge];
+    
+    UIImage *priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
+    
 
     
     switch (task.priority){
@@ -125,11 +136,38 @@
         if (indexPath.row < self.doneTasks.count) {
             Task *taskToDelete = self.doneTasks[indexPath.row];
             
-            [self.doneTasks removeObjectAtIndex:indexPath.row];
+            // Create the alert controller
+                       UIAlertController *alertController = [UIAlertController
+                                                            alertControllerWithTitle:@"Delete Completed Task"
+                                                            message:[NSString stringWithFormat:@"Are you sure you want to delete \"%@\"?", taskToDelete.name]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
             
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            // Create Cancel action
+                       UIAlertAction *cancelAction = [UIAlertAction
+                                                     actionWithTitle:@"Cancel"
+                                                     style:UIAlertActionStyleCancel
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                           // User cancelled, so we do nothing and the task remains
+                           [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                       }];
             
-            [[TaskManager sharedManager] deleteTask:taskToDelete];
+            // Create Delete action
+                       UIAlertAction *deleteAction = [UIAlertAction
+                                                     actionWithTitle:@"Delete"
+                                                     style:UIAlertActionStyleDestructive
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                           // User confirmed delete, so proceed with deletion
+                           [self.doneTasks removeObjectAtIndex:indexPath.row];
+                           [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                           [[TaskManager sharedManager] deleteTask:taskToDelete];
+                       }];
+            
+            // Add the actions to the alert controller
+                        [alertController addAction:cancelAction];
+                        [alertController addAction:deleteAction];
+                        
+                        // Present the alert controller
+                        [self presentViewController:alertController animated:YES completion:nil];
         }
     }
 }
@@ -137,4 +175,10 @@
 - (void)addTaskViewController:(id)controller MyTask:(Task *)task {
     [self loadTasks];
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 80;
+}
+
 @end

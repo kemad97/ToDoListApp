@@ -24,29 +24,30 @@
     self.lowPriorityTasks = [NSMutableArray array];
     self.mediumPriorityTasks = [NSMutableArray array];
     self.highPriorityTasks = [NSMutableArray array];
-
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]
-                                  initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                  initWithImage:[UIImage systemImageNamed:@"plus.circle.fill"]
+                                  style:UIBarButtonItemStylePlain
                                   target:self
                                   action:@selector(onAddClick)];
     self.navigationItem.rightBarButtonItem = addButton;
-
+    
     
     self.filteredLowPriorityTasks = [NSMutableArray array];
     self.filteredMediumPriorityTasks = [NSMutableArray array];
     self.filteredHighPriorityTasks = [NSMutableArray array];
     
     [self setupSearchController];
-
-   
-
+    
+    
+    
     self.taskManager = [TaskManager sharedManager];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(tasksUpdated:)
-                                                     name:@"TasksUpdatedNotification"
-                                                   object:nil];
+                                             selector:@selector(tasksUpdated:)
+                                                 name:@"TasksUpdatedNotification"
+                                               object:nil];
     
     
 }
@@ -90,7 +91,7 @@
         NSLog(@"ERROR: TaskManager is nil in tasktable");
         self.taskManager = [TaskManager sharedManager];
     }
-
+    
     [self.lowPriorityTasks removeAllObjects];
     [self.mediumPriorityTasks removeAllObjects];
     [self.highPriorityTasks removeAllObjects];
@@ -98,7 +99,7 @@
     //NSArray *allTasks = [self.taskManager getAllTasks];
     
     NSArray *allTasks = [self.taskManager tasksWithStatus:0]; // TASK_STATUS_TODO
-
+    
     
     for (Task *task in allTasks) {
         switch (task.priority) {
@@ -174,8 +175,8 @@
 - (void)onAddClick {
     AddTaskViewController *addTaskVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AddTaskID"];
     addTaskVC.delegate = self;
-
-
+    
+    
     
     [self.navigationController pushViewController:addTaskVC animated:YES];
 }
@@ -220,32 +221,36 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TaskCell"];
     
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"TaskCell"];
     UIImage *priorityIcon = nil;
-
+    
     Task *task = nil;
+    
+    UIImageConfiguration *largeConfig = [UIImageSymbolConfiguration configurationWithPointSize:25 weight:UIImageSymbolWeightMedium scale:UIImageSymbolScaleLarge];
     
     if (self.isSearching)
     {
+        
+        
         switch (indexPath.section) {
             case TASK_PRIORITY_HIGH:
                 if (self.filteredHighPriorityTasks.count > indexPath.row) {
                     task = self.filteredHighPriorityTasks[indexPath.row];
-                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill" withConfiguration:largeConfig];
                     cell.imageView.tintColor = [UIColor redColor];
                 }
                 break;
             case TASK_PRIORITY_MEDIUM:
                 if (self.filteredMediumPriorityTasks.count > indexPath.row) {
                     task = self.filteredMediumPriorityTasks[indexPath.row];
-                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
                     cell.imageView.tintColor = [UIColor orangeColor];
                 }
                 break;
             case TASK_PRIORITY_LOW:
                 if (self.filteredLowPriorityTasks.count > indexPath.row) {
                     task = self.filteredLowPriorityTasks[indexPath.row];
-                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                    priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
                     cell.imageView.tintColor = [UIColor systemGrayColor];
                 }
                 break;
@@ -256,19 +261,19 @@
         switch (indexPath.section) {
             case TASK_PRIORITY_HIGH:
                 task = self.highPriorityTasks[indexPath.row];
-                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
                 cell.imageView.tintColor = [UIColor redColor];
                 
                 break;
             case TASK_PRIORITY_MEDIUM:
                 task = self.mediumPriorityTasks[indexPath.row];
-                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
                 cell.imageView.tintColor = [UIColor orangeColor];
                 
                 break;
             case TASK_PRIORITY_LOW:
                 task = self.lowPriorityTasks[indexPath.row];
-                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"];
+                priorityIcon = [UIImage systemImageNamed:@"exclamationmark.triangle.fill"withConfiguration:largeConfig];
                 cell.imageView.tintColor = [UIColor systemGrayColor];
                 
                 break;
@@ -279,9 +284,11 @@
         cell.textLabel.text = task.name;
         cell.detailTextLabel.text = task.taskDescription;
         cell.imageView.image = priorityIcon;
-
+        
         
     }
+    
+    
     
     return cell;
 }
@@ -330,15 +337,15 @@
     
     switch (indexPath.section) {
         case TASK_PRIORITY_HIGH:
-                selectedTask = self.highPriorityTasks[indexPath.row];
+            selectedTask = self.highPriorityTasks[indexPath.row];
             
             break;
         case TASK_PRIORITY_MEDIUM:
-                selectedTask = self.mediumPriorityTasks[indexPath.row];
+            selectedTask = self.mediumPriorityTasks[indexPath.row];
             
             break;
-        case TASK_PRIORITY_LOW: 
-                selectedTask = self.lowPriorityTasks[indexPath.row];
+        case TASK_PRIORITY_LOW:
+            selectedTask = self.lowPriorityTasks[indexPath.row];
             
             break;
     }
@@ -382,14 +389,78 @@
         }
         
         if (taskToDelete) {
-            [[TaskManager sharedManager] deleteTask:taskToDelete];
-            
-            [self loadTasks];
-        }
+                    // Create the alert controller with a more descriptive title
+                    UIAlertController *alertController = [UIAlertController
+                                                         alertControllerWithTitle:@"Delete Task"
+                                                         message:[NSString stringWithFormat:@"Are you sure you want to delete \"%@\"?", taskToDelete.name]
+                                                         preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    // Create Cancel action
+                    UIAlertAction *cancelAction = [UIAlertAction
+                                                  actionWithTitle:@"Cancel"
+                                                  style:UIAlertActionStyleCancel
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+                        // User cancelled, so we do nothing and the task remains
+                        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    }];
+                    
+                    // Create Delete action
+                    UIAlertAction *deleteAction = [UIAlertAction
+                                                  actionWithTitle:@"Delete"
+                                                  style:UIAlertActionStyleDestructive
+                                                  handler:^(UIAlertAction * _Nonnull action) {
+                        // User confirmed delete, so proceed with deletion
+                        [[TaskManager sharedManager] deleteTask:taskToDelete];
+                        [self loadTasks];
+                    }];
+                    
+                    // Add the actions to the alert controller
+                    [alertController addAction:cancelAction];
+                    [alertController addAction:deleteAction];
+                    
+                    // Present the alert controller
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
     }
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 80;
 }
 
 
-
+// IMPROVED: Added custom header view with icons for each section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 40)];
+    headerView.backgroundColor = [UIColor systemBackgroundColor];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 10, 20, 20)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(45, 10, tableView.frame.size.width - 45, 20)];
+    label.font = [UIFont boldSystemFontOfSize:16];
+    
+    switch (section) {
+        case TASK_PRIORITY_HIGH:
+            imageView.image = [UIImage systemImageNamed:@"flag.fill"];
+            imageView.tintColor = [UIColor redColor];
+            label.text = @"High Priority";
+            break;
+        case TASK_PRIORITY_MEDIUM:
+            imageView.image = [UIImage systemImageNamed:@"flag.fill"];
+            imageView.tintColor = [UIColor orangeColor];
+            label.text = @"Medium Priority";
+            break;
+        case TASK_PRIORITY_LOW:
+            imageView.image = [UIImage systemImageNamed:@"flag.fill"];
+            imageView.tintColor = [UIColor systemGrayColor];
+            label.text = @"Low Priority";
+            break;
+    }
+    
+    [headerView addSubview:imageView];
+    [headerView addSubview:label];
+    return headerView;
+}
 
 @end
