@@ -32,10 +32,10 @@
     
     self.isSorted = NO;
     UIBarButtonItem *sortButton = [[UIBarButtonItem alloc]
-                                       initWithTitle:@"Sort"
+                                       initWithTitle:@"Priority Sort"
                                        style:UIBarButtonItemStylePlain
                                        target:self
-                                       action:@selector(sortTasksAlphabetically)];
+                                       action:@selector(sortTasksByPriority)];
         self.navigationItem.rightBarButtonItem = sortButton;
     
 }
@@ -44,7 +44,7 @@
 
 
 
-- (void)sortTasksAlphabetically {
+/*- (void)sortTasksAlphabetically {
     if (self.isSorted) {
         
         self.isSorted = NO;
@@ -65,7 +65,9 @@
     }
     
     [self.tableView reloadData];
-}
+}*/
+
+
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -80,7 +82,7 @@
     [self loadTasks];
 }
 
-- (void)loadTasks {
+/*- (void)loadTasks {
     [_inProgressTasks removeAllObjects];
     
     NSArray* inProgressTasksArr = [self.taskManager tasksWithStatus:1];
@@ -95,8 +97,66 @@
     }
     
     [self.tableView reloadData];
+}*/
+
+- (void)sortTasksByPriority {
+    if (self.isSorted) {
+        // Restore original order
+        self.isSorted = NO;
+        [self.inProgressTasks removeAllObjects];
+        [self.inProgressTasks addObjectsFromArray:self.originalTaskOrder];
+        self.navigationItem.rightBarButtonItem.title = @"Priority Sort";
+        
+    } else {
+        // Save original order and sort by priority
+        self.originalTaskOrder = [self.inProgressTasks copy];
+        self.isSorted = YES;
+        
+        // Sort by priority (high to low)
+        [self.inProgressTasks sortUsingComparator:^NSComparisonResult(Task *task1, Task *task2) {
+            // Compare priorities (lower priority value = higher priority)
+            // This makes High (0) come before Medium (1) before Low (2)
+            if (task1.priority < task2.priority) {
+                return NSOrderedAscending;
+            } else if (task1.priority > task2.priority) {
+                return NSOrderedDescending;
+            } else {
+                // If same priority, sort alphabetically by name
+                return [task1.name compare:task2.name];
+            }
+        }];
+        
+        self.navigationItem.rightBarButtonItem.title = @"Unsort";
+    }
+    
+    [self.tableView reloadData];
 }
 
+- (void)loadTasks {
+    [_inProgressTasks removeAllObjects];
+    
+    NSArray* inProgressTasksArr = [self.taskManager tasksWithStatus:1];
+    [self.inProgressTasks addObjectsFromArray:inProgressTasksArr];
+    
+    if (self.isSorted) {
+        // Apply the same sorting when loading tasks
+        [self.inProgressTasks sortUsingComparator:^NSComparisonResult(Task *task1, Task *task2) {
+            // Compare priorities (lower priority value = higher priority)
+            if (task1.priority < task2.priority) {
+                return NSOrderedAscending;
+            } else if (task1.priority > task2.priority) {
+                return NSOrderedDescending;
+            } else {
+                // If same priority, sort alphabetically by name
+                return [task1.name compare:task2.name];
+            }
+        }];
+    } else {
+        self.originalTaskOrder = [self.inProgressTasks copy];
+    }
+    
+    [self.tableView reloadData];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
